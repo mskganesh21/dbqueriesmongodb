@@ -66,5 +66,6 @@ db.personscollection.aggregate([{"$match": {"tags": {"$size": 3}}}])
 {"$group": {_id: "$gender"}}
 
 
-
+//group by nested fields
+db.personscollection.aggregate({"$group": {_id: "$company.location.country"})
 
