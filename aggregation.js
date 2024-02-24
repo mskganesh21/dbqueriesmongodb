@@ -170,5 +170,53 @@ db.personscollection.aggregate([{"$group": {_id: {"eyecolor": "$eyeColor", "favo
   //PROJECT CAN BE USED TO RENAME WITH NEW FIELDS
   
    db.personscollection.aggregate([{"$project": {"name": 1, "_id": 0, "info": {"eyes": "$eyeColor", "fruit": "$favoriteFruit", "country": "$company.location.country"}}}])
-   
+
+
+//LIMIT STAGE
+
+{"$limit": 100}
+
+ db.personscollection.aggregate([{"$limit":3}])
+ 
+ db.personscollection.aggregate([{"$limit":100}, {"$match": {"age": {"$gt":27 }}}, {"$group":{ _id: "$company.location.country"}}]) 
+ 
+ db.personscollection.aggregate([{"$limit":100}, {"$match": {"eyeColor": {"$ne": "blue" }}}, {"$group":{ _id: {"eyes": "$eyeColor", "favoriteFruit": "$favoriteFruit"}}}, {"$sort": {"_id.eyes": 1, "_id.favoriteFruit": -1}}])
+
+
+
+//ARRAYS AGGREGRATION OPERATIONS
+//UNWIND OPERATION STAGE
+
+{"$unwind": "$tags"}
+
+//example: suppose if we have a document which has an array of hobbies
+// if we use unwind operation then we'll get no of documents equal to the number of hobbies
+//if we have 3 hobbies we'll get 3 documents
+
+db.personscollection.aggregate([{"$unwind": "$tags"}, {"$count": "totalafterunwindoperation"}])
+
+//unwind is usually used with group and projection STAGE
+
+db.personscollection.aggregate([{"$unwind": "$tags"}, {"$project": {"name": 1, "gender": 1, "tags": 1} }])
+
+
+//unwind with group STAGE
+
+ 
+db.personscollection.aggregate([{"$unwind": "$tags"}, {"$group": {_id: "$tags"}}])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    
