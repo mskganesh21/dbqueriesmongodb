@@ -150,23 +150,25 @@ db.personscollection.aggregate([{"$group": {_id: "$favoriteFruit"}}, {"$sort": {
 db.personscollection.aggregate([{"$group": {_id: {"eyecolor": "$eyeColor", "favoriteFruit": "$favoriteFruit"}}}, {"$sort": {"_id.favoriteFruit": 1}}])
 
 
+//PROJECTION STAGE
 
+// 1 includes 0 don't include
 
+{"$project": {"key1": 1, "key2" : 0, "key3": expression}}
 
+{"$project": {"name": 1, "company.title": 0}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ db.personscollection.aggregate([{"$project": {"name": 1, "newAge": "$age", "_id": 0}}])
+ 
+ db.personscollection.aggregate([{"$project": {"name": 1, "company.location.country": 1, "_id": 0}}])
+ 
+  db.personscollection.aggregate([{"$project": {"name": 1, "gender": 1,"isActive": 1, "_id": 0}}, {"$count": "totalcount"}])
+  
+  
+  //PROJECT GOES AFTER MATCH STAGE
+  
+  //PROJECT CAN BE USED TO RENAME WITH NEW FIELDS
+  
+   db.personscollection.aggregate([{"$project": {"name": 1, "_id": 0, "info": {"eyes": "$eyeColor", "fruit": "$favoriteFruit", "country": "$company.location.country"}}}])
+   
+   
