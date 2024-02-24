@@ -118,6 +118,42 @@ db.personscollection.aggregate([]).toArray().length;
 db.personscollection.aggregate([{"$group": {_id: "$company.location.country"}},{"$count": "countriesCount"}])
 
 
+db.personscollection.aggregate([{"$group": {_id: "$age"}},{"$count": "agesCount"}])
+
+ db.personscollection.aggregate([{"$group": {_id: {"eyeColor": "$eyeColor", "gender": "$gender"}}},{"$count": "agesCount"}])
+ 
+ db.personscollection.aggregate([{"$group": {_id: {"eyeColor": "$eyeColor", "age": "$age"}}},{"$count": "noofagesgroupwithdifferenteyecolors"}])
+ 
+db.personscollection.aggregate([{"$match": {"age" : {"$gte": 25}}},{"$group": {_id: {"eyeColor": "$eyeColor", "age": "$age"}}},{"$count": "noofagesgroupwithdifferenteyecolors"}])
+
+
+//SORT STAGE 
+
+{"$sort": {"score": -1}}
+
+
+{"$sort": {"score": 1, "country": 1}}
+
+
+db.personscollection.aggregate([{"$match": {"age" : {"$gte": 25}}},{"$group": {_id: {"eyeColor": "$eyeColor", "age": "$age"}}},{"$sort": {"age": -1}}])
+
+db.personscollection.aggregate([{"$sort": {"name": 1}}])
+
+db.personscollection.aggregate([{"$sort": {"age": 1}}])
+
+ db.personscollection.aggregate([{"$sort": {"age": 1, "gender": -1, "eyeColor": 1}}])
+ 
+ 
+db.personscollection.aggregate([{"$group": {_id: "$favoriteFruit"}}, {"$sort": {_id: 1}}])
+
+
+db.personscollection.aggregate([{"$group": {_id: {"eyecolor": "$eyeColor", "favoriteFruit": "$favoriteFruit"}}}, {"$sort": {"_id.favoriteFruit": 1}}])
+
+
+
+
+
+
 
 
 
