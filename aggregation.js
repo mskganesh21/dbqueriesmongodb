@@ -66,6 +66,71 @@ db.personscollection.aggregate([{"$match": {"tags": {"$size": 3}}}])
 {"$group": {_id: "$gender"}}
 
 
-//group by nested fields
-db.personscollection.aggregate({"$group": {_id: "$company.location.country"})
+// group by multiple fields
+
+db.personscollection.aggregate([{"$group": {_id: {"age": "$age", "gender" : "$gender"}}}])
+
+db.personscollection.aggregate([{"$group": {_id: {"eyecolor": "$eyeColor", "favoriteFruit": "$favoriteFruit"}}}])
+
+
+db.personscollection.aggregate([{"$group": {_id: {"eyecolor": "$eyeColor", "favoriteFruit": "$favoriteFruit", "age": "$age"}}}])  
+
+
+//MATCH AND GROUP STAGE
+
+db.personscollection.aggregate([{"$match": {"favoriteFruit": "banana"}}, 
+{"$group": {_id: {"age": "$age", "eyeColor": "$eyeColor"}}}
+])
+
+
+db.personscollection.aggregate([{ "$match": { "gender": "female" } }, { "$group": { _id: { "age": "$age", "eyeColor": "$eyeColor" } } }])
+
+// if we change the order i.e. group and then match it doesn't work
+
+
+// we can also group and match but only fields available after group is done can be matched 
+
+db.personscollection.aggregate([{"$group": {_id: {"age": "$age", "eyeColor": "$eyeColor"}}},{"$match": {"_id.age": {"$gt": 30}}}])  
+
+
+
+// $COUNT OPERATOR STAGE
+
+//count is also the last one in the STAGE
+
+{"$count": "title"}
+{"$count": "countries"}
+
+db.personscollection.aggregate([{"$count": "allDocumentsCount"}])
+
+db.personscollection.aggregate([{"$group": {_id: {"age": "$age", "eyeColor": "$eyeColor"}}},{"$match": {"_id.age": {"$gt": 30}}}, {"$count": "alldocumentscount"}])
+
+
+//DIFFRENT COUNT METHODS
+
+db.personscollection.aggregate([]).toArray().length;
+
+ db.personscollection.aggregate([]).itcount()
+ 
+  db.personscollection.aggregate([{"$count": "Total"}])
+
+
+db.personscollection.aggregate([{"$group": {_id: "$company.location.country"}},{"$count": "countriesCount"}])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
