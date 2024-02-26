@@ -205,18 +205,81 @@ db.personscollection.aggregate([{"$unwind": "$tags"}, {"$project": {"name": 1, "
  
 db.personscollection.aggregate([{"$unwind": "$tags"}, {"$group": {_id: "$tags"}}])
 
+//MONGODB AGGREGATION FRAMEWORK
+//ACCUMULATORS
+//SUM AVG MAX MIN
+
+//USED IN GROUP STAGE
+
+
+{"$group": {"$sum": "$quantity"}}
+
+//SUM OPERATOR
+
+{"total": {"$sum": "$quantity"}}
+
+{"count": {"$sum": 1}}
+
+db.personscollection.aggregate([{"$group": {_id: "$age", "count": {"$sum": 1}}}])
+
+db.personscollection.aggregate([{"$group": {_id: "$favoriteFruit", "count": {"$sum": 1}}}])
+
+db.personscollection.aggregate([{"$unwind": "$tags"},{"$group": {_id: "$tags", "count": {"$sum": 1}}}])
+
+
+//AVG OPERATOR
+
+// we are grouping by eyecolor and finding avg age of persons
+db.personscollection.aggregate([{"$group": {_id: "$eyeColor", "avgAge": {"$avg": "$age"}}}])
+
+db.personscollection.aggregate([{"$group": {_id: "$favoriteFruit", "avgAge": {"$avg": "$age"}}}])
+
+db.personscollection.aggregate([{"$group": {_id: "$company.location.country", "avgAge": {"$avg": "$age"}}}])
+
+
+//UNARY OPERATORS
+
+//UNARY ARE USED IN PROJECT STAGE
+
+// IN GROUP STAGE UNARY CAN BE USED ONLY IN CONJUNCTION WITH ACCUMULATORS
+
+// TYPE OR LT GT AND MULTIPLY
+
+//TYPE UNARY OPERATOR
+
+//RETURNS BSON TYPE OF FIELD
+
+
+db.personscollection.aggregate([{"$project":{"name": 1, "eyeColorType": {"$type": "$eyeColor"}, "ageType": {"$type": "$age"}}}])    
+
+db.personscollection.aggregate([{"$project": {"name": 1, "nameType": {"$type": "$name"},"ageType": {"$type": "$age"},"tagsType": {"$type": "$tags"},"companyType": {"$type": "$company"}}}]) 
 
 
 
+//OUT STAGE
+
+//OUT STAGE IS WRITING RESULTING DOCUMENTS TO THE NEW MONGODB personscollection
+
+{"$out": "newCollection"}
+
+// must be the last stage 
+
+
+db.personscollection.aggregate([{"$project": {"name": 1, "nameType": {"$type": "$name"},"ageType": {"$type": "$age"},"tagsType": {"$type": "$tags"},"companyType": {"$type": "$company"}}}, {"$out": "outCollection"}])
 
 
 
+db.personscollection.aggregate([{"$group": {_id: {"age": "$age", "eyeColor": "$eyeColor"}}}, {"$out": "aggregatedResults"}])
 
 
 
+//ALL DISK USE OPTION
+
+// all aggreation stages can use max 100mb of ram
+
+// now we can use alldiskuse: true to store data in each stage in temporary files
 
 
+db.personscollection.aggregate([], {allowDiskUse: true})
 
 
-
-   
