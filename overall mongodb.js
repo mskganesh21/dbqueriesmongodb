@@ -101,6 +101,31 @@ db.posts.updateMany()
 
 
 
+//MONGODB UPDATE OPERATORS
+
+//SET RENAME UNSET CURRENTDATE INC ADDTOSET
+
+db.getCollection("posts").updateOne({"postId": 2618},
+ {"$set": {"shared" : true}})
+
+
+db.posts.updateMany({})
+
+//DELETE
+
+db.posts.deleteOne({query})
+
+db.posts.deleteMany({query})
+
+
+// indexes
+
+// utilities
+
+// replica sets
+
+// mongodb dreivers for nodejs
+
 
 
 
