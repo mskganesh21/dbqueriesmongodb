@@ -192,6 +192,12 @@ db.shoppingcart.updateOne({cart: {"$elemMatch": {title: "Phone", quantity: 4}}},
 
 
 
+// INC OPERATOR
+
+{"$inc": {"key": "amount"}}
+
+db.shoppingcart.updateOne({cartId: 325}, {"$inc": {"totalCartItems": NumberInt(1)}})
+
 
 
 
